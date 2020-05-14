@@ -1,0 +1,7 @@
+pandas~=1.0.3
+numpy~=1.18.3
+requests~=2.23.0
+tqdm~=4.45.0
+emoji~=0.5.4
+praw~=6.5.1
+pygsheets~=2.0.3.1
