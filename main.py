@@ -10,25 +10,25 @@ import os
 
 
 def main():
-
-    reddit = praw.Reddit()
+    pass
+    # reddit = praw.Reddit()
 
     # while True:
-    print('starting stream')
-    stream_start_time = time()
-    cmmts = []
-    client = pyg.authorize()
-    workbook = client.open('heroku test')
-    worksheet: pyg.Worksheet = workbook.worksheet_by_title('Sheet1')
-    for comment in reddit.redditor('awalker88').stream.comments():
-        cmmts.append([comment.id, comment.body])
-        # if comment.created_utc > stream_start_time and contains_point_trigger(comment.body):
-        #     print('replying')
-        #     # update_sheets()
-        #     reply(comment)
-
-        cmmt_df = pd.DataFrame(cmmts, columns=['Comment IDs', 'Text'])
-        worksheet.set_dataframe(cmmt_df, start='A1')
+    # print('starting stream')
+    # stream_start_time = time()
+    # cmmts = []
+    # client = pyg.authorize()
+    # workbook = client.open('heroku test')
+    # worksheet: pyg.Worksheet = workbook.worksheet_by_title('Sheet1')
+    # for comment in reddit.redditor('awalker88').stream.comments():
+    #     cmmts.append([comment.id, comment.body])
+    #     # if comment.created_utc > stream_start_time and contains_point_trigger(comment.body):
+    #     #     print('replying')
+    #     #     # update_sheets()
+    #     #     reply(comment)
+    #
+    #     cmmt_df = pd.DataFrame(cmmts, columns=['Comment IDs', 'Text'])
+    #     worksheet.set_dataframe(cmmt_df, start='A1')
 
 
 def contains_point_trigger(text: str):
