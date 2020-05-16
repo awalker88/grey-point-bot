@@ -66,6 +66,7 @@ def reply(comment: praw.reddit.models.Comment):
 
 
 if __name__ == '__main__':
+    print('here')
     print(os.environ['reddit_username'])
     # main()
 
