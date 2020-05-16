@@ -11,7 +11,14 @@ import os
 
 def main():
     pass
-    # reddit = praw.Reddit()
+    reddit = praw.Reddit(
+        username=os.environ["reddit_username"],
+        password=os.environ["reddit_password"],
+        client_id=os.environ["reddit_client_id"],
+        client_secret=os.environ["reddit_client_secret"],
+        user_agent='grey-points-bot v1'
+    )
+    print(reddit)
 
     # while True:
     # print('starting stream')
@@ -69,6 +76,7 @@ if __name__ == '__main__':
     print('starting loop')
     while True:
         pass
+
     # print(os.environ['reddit_username'])
     # main()
 
