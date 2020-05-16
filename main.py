@@ -25,6 +25,7 @@ def main():
     # stream_start_time = time()
     # cmmts = []
     client = pyg.authorize(service_account_env_var='sheet_client_secret_json')
+    print(client)
     # workbook = client.open('heroku test')
     # print('workbook:::', workbook)
     # worksheet: pyg.Worksheet = workbook.worksheet_by_title('Sheet1')
