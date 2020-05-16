@@ -3,6 +3,7 @@ import emoji
 import pygsheets as pyg
 import pandas as pd
 from time import time
+import os
 
 # todo: revoke grey point if user edits comment to accept award
 # todo: https://www.reddit.com/r/CGPGrey/comments/dz43wa/the_sneaky_plan_to_subvert_the_electoral_college/f87g08w/?context=8&depth=9
@@ -65,6 +66,7 @@ def reply(comment: praw.reddit.models.Comment):
 
 
 if __name__ == '__main__':
-    main()
+    print(os.environ['reddit_username'])
+    # main()
 
 
