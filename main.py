@@ -18,7 +18,7 @@ def main():
         client_secret=os.environ["reddit_client_secret"],
         user_agent='grey-points-bot v1'
     )
-    print(reddit)
+    print('environ test::::', reddit)
 
     # while True:
     # print('starting stream')
@@ -74,10 +74,6 @@ def reply(comment: praw.reddit.models.Comment):
 
 if __name__ == '__main__':
     print('starting loop')
-    while True:
-        pass
-
-    # print(os.environ['reddit_username'])
-    # main()
+    main()
 
 
