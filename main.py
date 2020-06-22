@@ -21,20 +21,22 @@ def main():
     print('environ test:::', reddit)
 
     # while True:
-    # print('starting stream')
-    # stream_start_time = time()
-    # cmmts = []
-    client = pyg.authorize(service_account_env_var='sheet_client_secret_json')
-    print(client)
+    stream_start_time = time()
+    print('starting stream', stream_start_time)
+    cmmts = []
+    # client = pyg.authorize(service_account_env_var='sheet_client_secret_json')
+    # client = pyg.authorize()
+    #
+    # print(client)
     # workbook = client.open('heroku test')
     # print('workbook:::', workbook)
     # worksheet: pyg.Worksheet = workbook.worksheet_by_title('Sheet1')
-    # for comment in reddit.redditor('awalker88').stream.comments():
-    #     cmmts.append([comment.id, comment.body])
-    #     # if comment.created_utc > stream_start_time and contains_point_trigger(comment.body):
-    #     #     print('replying')
-    #     #     # update_sheets()
-    #     #     reply(comment)
+    for comment in reddit.redditor('awalker88').stream.comments():
+        # cmmts.append([comment.id, comment.body])
+        if comment.created_utc > stream_start_time and contains_point_trigger(comment.body):
+            print('replying')
+            # update_sheets()
+            reply(comment)
     #
     #     cmmt_df = pd.DataFrame(cmmts, columns=['Comment IDs', 'Text'])
     #     worksheet.set_dataframe(cmmt_df, start='A1')
@@ -59,8 +61,8 @@ def add_comment_to_sheet(comment: praw.reddit.models.Comment):
     workbook = client.open('Grey Points')
     points_list = pd.DataFrame(workbook.worksheet_by_title('Points List').get_as_df())
     next_id = points_list['Comment ID'].max() + 1
-    username = f'/u/{comment.parent().author()}'
-    comment_link = 'www.reddit.com/comments/' + comment.link_id.url.str[3:] + '/_/' + comment.id
+    username = rf'/u/{comment.parent().author()}'
+    comment_link = rf'old.reddit.com/comments/{comment.link_id.url.str[3:]}/_/{comment.id}'
 
 
 def reply(comment: praw.reddit.models.Comment):
