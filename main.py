@@ -67,12 +67,18 @@ def add_comment_to_sheet(comment: praw.reddit.models.Comment):
 
 def reply(comment: praw.reddit.models.Comment):
     recipient = comment.parent()
-    text = f"Congrats u/{recipient.author}, you just earned a Grey Point!  " \
-           f"&nbsp;" \
-           f"\n\nYou can view all recepients of Grey Points [here](https://docs.google.com/spreadsheets/d/18_Y1TrcEZHHYesYX8lVO9BdbbEPWWMPaLZ1DONwOQjI/edit#gid=546994114)  " \
-           f".\n___\n" \
-           f"^(beep boop i'm a bot | [GitHub](https://github.com/awalker88/grey-point-bot) | report issues [here](https://www.reddit.com/message/compose/?to=awalker88&amp;subject=Grey Points Issue&amp;message=Enter the issue here) | Grey click here if you want more info )"
+    if recipient.author != 'MindOfMetalAndWheels':
+        personal_reply = f"Congrats u/{recipient.author}, you just earned a Grey Point!  "
+    # Probably shouldn't let Grey give points to himself...
+    else:
+        personal_reply = f"Hmmmm... something about the ability to give points to yourself doesn't seem quite right 🤔 u/{recipient.author}  "
 
+    footer = f"&nbsp;" \
+             f"\n\nYou can view all recipients of Grey Points [here](https://docs.google.com/spreadsheets/d/18_Y1TrcEZHHYesYX8lVO9BdbbEPWWMPaLZ1DONwOQjI/edit#gid=546994114)  " \
+             f".\n___\n" \
+             f"^(beep boop i'm a bot | [GitHub](https://github.com/awalker88/grey-point-bot) | [report issues here](https://www.reddit.com/message/compose/?to=awalker88&amp;subject=Grey Points Issue&amp;message=Enter the issue here) | [Click here for more info](https://github.com/awalker88/grey-point-bot/edit/master/README.md))"
+
+    text = personal_reply + footer
     comment.reply(text)
 
 
