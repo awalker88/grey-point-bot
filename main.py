@@ -81,17 +81,14 @@ def add_comment_to_sheet(comment: praw.reddit.models.Comment, worksheet: pyg.Wor
     new_entry = {
         'Point ID': worksheet_df['Point ID'].max() + 1,
         'Username': rf'/u/{comment.parent().author}',
-        'Comment Link': rf'old.reddit.com/comments/{comment.link_id[3:]}/_/{comment.id}',
+        'Comment Link': rf'old.reddit.com/comments/{comment.link_id[3:]}/_/{comment.id}/?context=3',
         'Subreddit': rf"/r/{comment.subreddit}",
-        'Date': formatted_utc.strftime('%Y-%m-%d  %H:%M:%S')
+        'Date': formatted_utc.strftime('%Y-%m-%d  %H:%M:%S'),
+        'Comment ID': comment.id
                  }
 
-    confirm = input(f'reply to {new_entry["Comment Link"]}?: ')
-    if confirm.lower() != 'y':
-        exit()
-
-    worksheet_df = pd.concat([worksheet_df, pd.DataFrame(new_entry)])
-    worksheet.update_values('A1', worksheet_df.to_list())
+    worksheet_df = pd.concat([worksheet_df, pd.DataFrame(new_entry, index=[1])])
+    worksheet.set_dataframe(worksheet_df, start='A1')
 
 
 def reply(comment: praw.reddit.models.Comment):
