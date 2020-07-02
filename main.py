@@ -41,6 +41,12 @@ def main():
 
 
 def should_add(worksheet: pyg.Worksheet, comment: praw.reddit.models.Comment):
+    """
+    Whether or not a comment passes the criteria for adding to the Google Sheet and replying
+    :param worksheet: worksheet containing grey points
+    :param comment: comment by Grey
+    :return: Whether comment passes
+    """
     # not in sheet
     worksheet_df = worksheet.get_as_df()
     if comment.id in worksheet_df['Comment ID'].to_list():
