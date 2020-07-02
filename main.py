@@ -3,7 +3,8 @@ import emoji
 import pygsheets as pyg
 import pandas as pd
 from time import time
-import os
+from datetime import datetime
+from time import sleep
 
 # todo: revoke grey point if user edits comment to accept award
 # todo: https://www.reddit.com/r/CGPGrey/comments/dz43wa/the_sneaky_plan_to_subvert_the_electoral_college/f87g08w/?context=8&depth=9
@@ -18,28 +19,46 @@ def main():
         client_secret=os.environ["reddit_client_secret"],
         user_agent='grey-points-bot v1'
     )
-    print('environ test:::', reddit)
 
     # while True:
     stream_start_time = time()
     print('starting stream', stream_start_time)
-    cmmts = []
-    # client = pyg.authorize(service_account_env_var='sheet_client_secret_json')
-    # client = pyg.authorize()
-    #
-    # print(client)
-    # workbook = client.open('heroku test')
-    # print('workbook:::', workbook)
-    # worksheet: pyg.Worksheet = workbook.worksheet_by_title('Sheet1')
-    for comment in reddit.redditor('awalker88').stream.comments():
-        # cmmts.append([comment.id, comment.body])
-        if comment.created_utc > stream_start_time and contains_point_trigger(comment.body):
-            print('replying')
-            # update_sheets()
+    client = pyg.authorize(
+        # service_account_env_var='sheet_client_secret_json' todo: for local
+    )
+
+    workbook = client.open('Grey Points')
+    print('workbook:::', workbook)
+    points_list_ws: pyg.Worksheet = workbook.worksheet_by_title('Points List')
+    for comment in reddit.redditor('MindOfMetalAndWheels').stream.comments():
+        print(comment.body)
+        if should_add(points_list_ws, comment):
+            print(f'would reply to {comment.body}')
+            add_comment_to_sheet(comment, points_list_ws)
             reply(comment)
-    #
-    #     cmmt_df = pd.DataFrame(cmmts, columns=['Comment IDs', 'Text'])
-    #     worksheet.set_dataframe(cmmt_df, start='A1')
+
+        sleep(.25)
+
+
+def should_add(worksheet: pyg.Worksheet, comment: praw.reddit.models.Comment):
+    # not in sheet
+    worksheet_df = worksheet.get_as_df()
+    if comment.id in worksheet_df['Comment ID'].to_list():
+        return False
+
+    # grey deleted his comment or it was removed
+    if comment.removal_reason is not None:
+        return False
+
+    # parent is deleted
+    if comment.parent().author is None:
+        return False
+
+    # doesn't contain point_trigger
+    if not contains_point_trigger(comment.body):
+        return False
+
+    return True
 
 
 def contains_point_trigger(text: str):
@@ -56,13 +75,23 @@ def contains_point_trigger(text: str):
     return False
 
 
-def add_comment_to_sheet(comment: praw.reddit.models.Comment):
-    client = pyg.authorize()
-    workbook = client.open('Grey Points')
-    points_list = pd.DataFrame(workbook.worksheet_by_title('Points List').get_as_df())
-    next_id = points_list['Comment ID'].max() + 1
-    username = rf'/u/{comment.parent().author()}'
-    comment_link = rf'old.reddit.com/comments/{comment.link_id.url.str[3:]}/_/{comment.id}'
+def add_comment_to_sheet(comment: praw.reddit.models.Comment, worksheet: pyg.Worksheet):
+    worksheet_df = worksheet.get_as_df()
+    formatted_utc = datetime.utcfromtimestamp(comment.created_utc)
+    new_entry = {
+        'Point ID': worksheet_df['Point ID'].max() + 1,
+        'Username': rf'/u/{comment.parent().author}',
+        'Comment Link': rf'old.reddit.com/comments/{comment.link_id[3:]}/_/{comment.id}',
+        'Subreddit': rf"/r/{comment.subreddit}",
+        'Date': formatted_utc.strftime('%Y-%m-%d  %H:%M:%S')
+                 }
+
+    confirm = input(f'reply to {new_entry["Comment Link"]}?: ')
+    if confirm.lower() != 'y':
+        exit()
+
+    worksheet_df = pd.concat([worksheet_df, pd.DataFrame(new_entry)])
+    worksheet.update_values('A1', worksheet_df.to_list())
 
 
 def reply(comment: praw.reddit.models.Comment):
@@ -74,7 +103,7 @@ def reply(comment: praw.reddit.models.Comment):
         personal_reply = f"Hmmmm... something about the ability to give points to yourself doesn't seem quite right 🤔 u/{recipient.author}  "
 
     footer = f"&nbsp;" \
-             f"\n\nYou can view all recipients of Grey Points [here](https://docs.google.com/spreadsheets/d/18_Y1TrcEZHHYesYX8lVO9BdbbEPWWMPaLZ1DONwOQjI/edit#gid=546994114)  " \
+             f"\n\nYou can view all recipients of Grey Points [here](https://docs.google.com/spreadsheets/d/18_Y1TrcEZHHYesYX8lVO9BdbbEPWWMPaLZ1DONwOQjI/edit?usp=sharing)  " \
              f".\n___\n" \
              f"^(beep boop i'm a bot | [GitHub](https://github.com/awalker88/grey-point-bot) | [report issues here](https://www.reddit.com/message/compose/?to=awalker88&amp;subject=Grey Points Issue&amp;message=Enter the issue here) | [Click here for more info](https://github.com/awalker88/grey-point-bot/edit/master/README.md))"
 
