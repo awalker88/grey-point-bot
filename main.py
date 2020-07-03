@@ -99,11 +99,14 @@ def add_comment_to_sheet(comment: praw.reddit.models.Comment, worksheet: pyg.Wor
 
 def reply(comment: praw.reddit.models.Comment):
     recipient = comment.parent()
-    if recipient.author != 'MindOfMetalAndWheels':
-        personal_reply = f"Congrats u/{recipient.author}, you just earned a Grey Point!  "
-    # Probably shouldn't let Grey give points to himself...
-    else:
+    if recipient.author == 'MindOfMetalAndWheels':
+        # Probably shouldn't let Grey give points to himself...
         personal_reply = f"Hmmmm... something about the ability to give points to yourself doesn't seem quite right 🤔 u/{recipient.author}  "
+    elif recipient.author == 'grey-point-bot':
+        personal_reply = f"Probably best if I stay out of the rankings :)  "
+
+    else:
+        personal_reply = f"Congrats u/{recipient.author}, you just earned a Grey Point!  "
 
     footer = f"&nbsp;" \
              f"\n\nYou can view all recipients of Grey Points [here](https://docs.google.com/spreadsheets/d/18_Y1TrcEZHHYesYX8lVO9BdbbEPWWMPaLZ1DONwOQjI/edit?usp=sharing)  " \
