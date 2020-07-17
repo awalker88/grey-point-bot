@@ -9,6 +9,8 @@ client = pyg.authorize(
 print(':::authorized')
 workbook = client.open('Grey Points')
 print('workbook:::', workbook)
+s = workbook.worksheet_by_title('Points List')
+print(':::s', s)
 while True:
     workbook = client.open('Grey Points')
     print('workbook:::', workbook)
