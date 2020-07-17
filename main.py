@@ -5,13 +5,11 @@ import pandas as pd
 from time import time
 from datetime import datetime
 from time import sleep
+import os
 
 # todo: revoke grey point if user edits comment to accept award
-# todo: https://www.reddit.com/r/CGPGrey/comments/dz43wa/the_sneaky_plan_to_subvert_the_electoral_college/f87g08w/?context=8&depth=9
-
 
 def main():
-    pass
     reddit = praw.Reddit(
         username=os.environ["reddit_username"],
         password=os.environ["reddit_password"],
@@ -20,7 +18,6 @@ def main():
         user_agent='grey-points-bot v1'
     )
 
-    # while True:
     stream_start_time = time()
     print('starting stream', stream_start_time)
     client = pyg.authorize(
@@ -103,7 +100,7 @@ def reply(comment: praw.reddit.models.Comment):
         # Probably shouldn't let Grey give points to himself...
         personal_reply = f"Hmmmm... something about the ability to give points to yourself doesn't seem quite right 🤔 u/{recipient.author}  "
     elif recipient.author == 'grey-point-bot':
-        personal_reply = f"Probably best if I stay out of the rankings :)  "
+        personal_reply = f"Hmmmm... probably best if I stay out of this :)  "
 
     else:
         personal_reply = f"Congrats u/{recipient.author}, you just earned a Grey Point!  "
