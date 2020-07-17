@@ -1,1 +1,1 @@
-worker: python main.py
+worker: python pygsheets_test.py
