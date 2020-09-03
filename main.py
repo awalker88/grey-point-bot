@@ -9,6 +9,7 @@ import os
 
 # todo: revoke grey point if user edits comment to accept award
 
+
 def main():
     reddit = praw.Reddit(
         username=os.environ["reddit_username"],
@@ -28,9 +29,8 @@ def main():
     print('workbook:::', workbook)
     points_list_ws: pyg.Worksheet = workbook.worksheet_by_title('Points List')
     for comment in reddit.redditor('MindOfMetalAndWheels').stream.comments():
-        print(comment.body)
         if should_add(points_list_ws, comment):
-            print(f'would reply to {comment.body}')
+            print(f'Replying to {comment.body}')
             add_comment_to_sheet(comment, points_list_ws)
             reply(comment)
 
@@ -84,7 +84,7 @@ def add_comment_to_sheet(comment: praw.reddit.models.Comment, worksheet: pyg.Wor
     new_entry = {
         'Point ID': worksheet_df['Point ID'].max() + 1,
         'Username': rf'/u/{comment.parent().author}',
-        'Comment Link': rf'old.reddit.com/comments/{comment.link_id[3:]}/_/{comment.id}/?context=3',
+        'Comment Link': rf'https://old.reddit.com/comments/{comment.link_id[3:]}/_/{comment.id}/?context=3',
         'Subreddit': rf"/r/{comment.subreddit}",
         'Date': formatted_utc.strftime('%Y-%m-%d  %H:%M:%S'),
         'Comment ID': comment.id
@@ -98,7 +98,8 @@ def reply(comment: praw.reddit.models.Comment):
     recipient = comment.parent()
     if recipient.author == 'MindOfMetalAndWheels':
         # Probably shouldn't let Grey give points to himself...
-        personal_reply = f"Hmmmm... something about the ability to give points to yourself doesn't seem quite right 🤔 u/{recipient.author}  "
+        personal_reply = f"Hmmmm... something about the ability to give points to yourself doesn't " \
+                         f"seem quite right 🤔 u/MindOfMetalAndWheels  "
     elif recipient.author == 'grey-point-bot':
         personal_reply = f"Hmmmm... probably best if I stay out of this :)  "
 

@@ -15,4 +15,10 @@ This comment would not:
 ```
 
 # How does this bot work?
-The bot is written in Python and monitors Reddit using Praw. It is hosted on a Heroku server.
+The bot is written in Python and is hosted is hosted on a Heroku server.
+
+## Dependencies
+- [pygsheets](https://github.com/nithinmurali/pygsheets)
+- [praw](https://github.com/praw-dev/praw)
+- [emoji](https://github.com/carpedm20/emoji)
+- [pandas](https://github.com/pandas-dev/pandas)
