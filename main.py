@@ -101,7 +101,7 @@ def reply(comment: praw.reddit.models.Comment):
         personal_reply = f"Hmmmm... something about the ability to give points to yourself doesn't " \
                          f"seem quite right 🤔 u/MindOfMetalAndWheels  "
     elif recipient.author == 'grey-point-bot':
-        personal_reply = f"Hmmmm... probably best if I stay out of this :)  "
+        personal_reply = f"Hmmmm... probably best if I stay out of this "
 
     else:
         personal_reply = f"Congrats u/{recipient.author}, you just earned a Grey Point!  "
@@ -109,7 +109,7 @@ def reply(comment: praw.reddit.models.Comment):
     footer = f"&nbsp;" \
              f"\n\nYou can view all recipients of Grey Points [here](https://docs.google.com/spreadsheets/d/18_Y1TrcEZHHYesYX8lVO9BdbbEPWWMPaLZ1DONwOQjI/edit?usp=sharing)  " \
              f".\n___\n" \
-             f"^(beep boop i'm a bot | [GitHub](https://github.com/awalker88/grey-point-bot) | [report issues here](https://www.reddit.com/message/compose/?to=awalker88&amp;subject=Grey Points Issue&amp;message=Enter the issue here) | [Click here for more info](https://github.com/awalker88/grey-point-bot/edit/master/README.md))"
+             f"^(beep boop i'm a bot | [GitHub](https://github.com/awalker88/grey-point-bot) | [report issues here](https://www.reddit.com/message/compose/?to=awalker88&amp;subject=Grey Points Issue&amp;message=Enter the issue here) | [Click here for more info](https://github.com/awalker88/grey-point-bot#grey-point-bot))"
 
     text = personal_reply + footer
     comment.reply(text)
